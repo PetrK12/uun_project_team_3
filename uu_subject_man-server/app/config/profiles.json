@@ -1,0 +1,90 @@
+{
+  "{asid}": {
+    "profileList": ["AsidAuthorities","AsidExecutives","AsidLicenseOwner","Public"],
+    "useCaseMap": {}
+  },
+  "*": {
+    "profileList": ["Authorities","Executives","AwidLicenseOwner","Public","Authenticated","AwidInitiator"],
+    "useCaseMap": {
+      "sys/uuAppWorkspace/init": {
+        "sysStateList": ["created","assigned"],
+        "profileList": ["AwidLicenseOwner","AwidInitiator"]
+      },
+      "sys/uuAppWorkspace/load": {
+        "sysStateList": ["active"],
+        "profileList": ["Authenticated"]
+      },
+      "sys/uuAppWorkspace/loadBasicData": {
+        "sysStateList": ["active"],
+        "profileList": ["Public"]
+      },
+      "defaultUve": {
+        "profileList": ["Public"]
+      },
+      "sys/uuAppWorkspace/initUve": {
+        "sysStateList": ["created"],
+        "profileList": ["Public","AwidLicenseOwner"]
+      },
+      "studyMaterial/create": {
+        "sysStateList": ["active"],
+        "profileList": ["Public"]
+      },
+      "studyMaterial/get": {
+        "sysStateList": ["active"],
+        "profileList": ["Public"]
+      },
+      "studyMaterial/delete": {
+        "sysStateList": ["active"],
+        "profileList": ["Public"]
+      },
+      "studyMaterial/update": {
+        "sysStateList": ["active"],
+        "profileList": ["Public"]
+      },
+      "studyMaterial/list": {
+        "sysStateList": ["active"],
+        "profileList": ["Public"]
+      },
+      "topic/create": {
+        "sysStateList": ["active"],
+        "profileList": []
+      },
+      "topic/get": {
+        "sysStateList": ["active"],
+        "profileList": []
+      },
+      "topc/delete": {
+        "sysStateList": ["active"],
+        "profileList": []
+      },
+      "topic/update": {
+        "sysStateList": ["active"],
+        "profileList": []
+      },
+      "topic/list": {
+        "sysStateList": ["active"],
+        "profileList": []
+      },
+      "subject/create": {
+        "sysStateList": ["active"],
+        "profileList": []
+      },
+      "subject/get": {
+        "sysStateList": ["active"],
+        "profileList": []
+      },
+      "subject/delete": {
+        "sysStateList": ["active"],
+        "profileList": []
+      },
+      "subject/update": {
+        "sysStateList": ["active"],
+        "profileList": []
+      },
+      "subject/list": {
+        "sysStateList": ["active"],
+        "profileList": []
+      }
+    }
+  }
+}
