@@ -2,14 +2,14 @@
   "schemaVersion": "1.0.0",
   "schemaSpecificationUri": "https://uuapp.plus4u.net/uu-bookkit-maing01/bef682626ed943f28cde360ccb325981/book/page?code=uuSubAppInstanceDescriptor",
   "uuSubApp": {
-    "code": "UU.SUBJECT.MAN",
-    "version": "0.1.0",
+    "code": "UUN.BPMI22WPT03.MAING01",
+    "version": "0.1.0-DEV",
     "name": "uuSubjectMan",
     "description": "",
     "license": "License Commercial",
     "asidRequired": true,
     "awidCount": 1,
-    "resourcePoolUri": "----- VALUE REQUIRED -----",
+    "resourcePoolUri": "ues:UCL-BT:UUN_STUDENTS03_AWE",
     "uuAppNodeSetMap": {
       "CMD": {
         "nodeSize": "G1_S",
@@ -17,7 +17,7 @@
           "min": 1,
           "max": 1
         },
-        "appPackUri": null,
+        "appPackUri": "ues:UCL-BT:UUN.BPMI22WPT03.MAING01/APPBOX-0.1.0-DEV:UUN.BPMI22WPT03.MAING01/CMD-PACK",
         "runtimeStack": "UU.APPG01/APPSERVER_NODEJS_STACK-1.6"
       }
     },
@@ -29,7 +29,36 @@
         "alias": "primary"
       }
     },
+    "uuAppBinaryStoreMap": {
+      "BSID_1": {
+        "size": 0.25,
+        "alias": "binary"
+      }
+    },
     "uuConfigMap": {
+      "asid_license_owner_list": [
+        "579-8638-126-1"
+      ]
+    }
+  },
+  "uuSubAppInstance": {
+    "asid": "2a05060a1fc5373751391e9efc5adb6b",
+    "asidOwner": "579-8638-126-1",
+    "awidList": [
+      {
+        "awid": "f8a4ccb58ad13471ec0a6cd116b397df",
+        "awidOwner": "579-4049-7156-1"
+      }
+    ],
+    "uuAppObjectStoreMap": {
+      "OSID_1": {
+        "osid": "bm4lrnm3w1xb7irun4m8gr7ko3qeew9ue"
+      }
+    },
+    "uuAppBinaryStoreMap": {
+      "BSID_1": {
+        "bsid": "https://uuappg01-eu-c-3.plus4u.net/uu-appbinarystore-maing02/cmgxvmdn0mcl6b2pusmt3g1577uzc6lnu"
+      }
     }
   }
 }

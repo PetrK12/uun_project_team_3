@@ -83,7 +83,7 @@
       },
       "subject/list": {
         "sysStateList": ["active"],
-        "profileList": []
+        "profileList": ["Public"]
       }
     }
   }

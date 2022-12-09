@@ -19,27 +19,30 @@ const About = {
   },
   leadingAuthors: [
     {
-      name: "Some Name",
-      uuIdentity: "4-4-1",
-      role: "Chief Business Architect & Stakeholder",
-    },
-    {
-      name: "Other Name",
-      uuIdentity: "4-4-1",
-      role: "Head of Development",
-    },
-  ],
-  otherAuthors: [
-    {
-      name: "Your Name",
-      uuIdentity: "4-4-1",
+      name: "David Kret",
+      uuIdentity: "2121-3803-1",
       role: "Developer",
     },
     {
-      name: "More Names",
-      uuIdentity: "4-4-1",
+      name: "David Navrátil",
+      uuIdentity: "4624-469-1",
       role: "Developer",
     },
+    {
+      name: "Diana Radova",
+      uuIdentity: "5883-8023-1",
+      role: "Developer",
+    },
+    {
+      name: "Lenka Kalašová",
+      uuIdentity: "2377-8003-1",
+      role: "Developer",
+    },
+    {
+      name: "Petr Kutil",
+      uuIdentity: "4128-6405-1",
+      role: "Developer",
+    }
   ],
   usedTechnologies: {
     technologies: [

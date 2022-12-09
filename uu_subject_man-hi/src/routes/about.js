@@ -172,16 +172,6 @@ let About = createVisualComponent({
                 className={Css.technologies()}
               />
             </div>
-            <div>
-              <DynamicLibraryComponent
-                uu5Tag="Plus4U5.App.Licence"
-                organisation={license.organisation}
-                authorities={license.authorities}
-                awid={<Uu5Elements.Link href={Environment.appBaseUri}>{awid}</Uu5Elements.Link>}
-                textAlign="left"
-                className={Css.license()}
-              />
-            </div>
           </div>
           <div className={Css.logos()}>
             <img height={80} src="assets/plus4u.svg" />

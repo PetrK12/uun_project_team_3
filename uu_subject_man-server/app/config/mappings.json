@@ -101,7 +101,7 @@
         "realization": "api/controllers/SubjectController.list",
         "httpMethod": "GET",
         "type": "CMD"
-      },
+      }
     }
   }
 }
