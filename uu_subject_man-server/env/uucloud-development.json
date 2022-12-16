@@ -29,12 +29,6 @@
         "alias": "primary"
       }
     },
-    "uuAppBinaryStoreMap": {
-      "BSID_1": {
-        "size": 0.25,
-        "alias": "binary"
-      }
-    },
     "uuConfigMap": {
       "asid_license_owner_list": [
         "579-8638-126-1"
@@ -53,11 +47,6 @@
     "uuAppObjectStoreMap": {
       "OSID_1": {
         "osid": "bm4lrnm3w1xb7irun4m8gr7ko3qeew9ue"
-      }
-    },
-    "uuAppBinaryStoreMap": {
-      "BSID_1": {
-        "bsid": "https://uuappg01-eu-c-3.plus4u.net/uu-appbinarystore-maing02/cmgxvmdn0mcl6b2pusmt3g1577uzc6lnu"
       }
     }
   }
