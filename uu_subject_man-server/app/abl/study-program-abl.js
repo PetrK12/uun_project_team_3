@@ -210,7 +210,7 @@ class StudyProgramAbl {
         data.awid = awid;
         if(dtoIn.subjectList !== undefined)
         {
-          data.subjectList = subject.existingEntities;
+          data.subjectList = dtoIn.subjectList;
         }
         studyProgram = await this.dao.create(data);
       }
