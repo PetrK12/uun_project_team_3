@@ -5,6 +5,7 @@
     type: uu5String(512),
     difficulty: uu5String(512),
     length: uu5String(512),
+    material: uu5String(512)
   });
   
   const studyMaterialGetDtoInType = shape({

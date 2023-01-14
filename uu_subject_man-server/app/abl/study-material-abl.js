@@ -44,7 +44,7 @@ class StudyMaterialAbl {
 
     let material;
     try {
-      material = await this.dao.get(awid, dtoIn);
+      material = await this.dao.get(awid, dtoIn.id);
       if(material === null)
       {
         throw new Errors.Update.InvalidId({ uuAppErrorMap });        
@@ -76,7 +76,7 @@ class StudyMaterialAbl {
       Errors.Delete.InvalidDtoIn
     );
     
-    let material ;
+    let material;
     try {
       material = this.dao.get(awid,dtoIn.id);
       if(material === null)
@@ -87,7 +87,7 @@ class StudyMaterialAbl {
       {
         let data = dtoIn;
         data.awid = awid;
-        category = await this.dao.remove(data);
+        material = await this.dao.remove(data);
       }
     } catch (e) {
       if (e instanceof ObjectStoreError) {

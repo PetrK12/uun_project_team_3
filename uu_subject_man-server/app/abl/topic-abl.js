@@ -30,18 +30,22 @@ class TopicAbl {
       Errors.Create.InvalidDtoIn
     );
 
-    let idValidator = new IdValidator("studyMaterial");
-    let studyMaterial = await idValidator.checkIdValid(awid, dtoIn.studyMaterialList);
-    let topic;
+    let studyMaterial;
+    let data = dtoIn;
 
+    let idValidator = new IdValidator("studyMaterial");
+    if (dtoIn.studyMaterialList !== undefined) {
+      studyMaterial = await idValidator.checkIdValid(awid, dtoIn.studyMaterialList);
+      data.studyMaterialList = studyMaterial.existingEntities;
+    }
+
+    let topic;
     try {
       if (await this.dao.getByName(awid, { name: dtoIn.name }) !== null) {
         throw new Errors.Create.TopicDuplicate({ uuAppErrorMap });
       }
       else {
-        let data = dtoIn;
         data.awid = awid;
-        data.studyMaterialList = studyMaterial.existingEntities;
         topic = await this.dao.create(data);
       }
     } catch (e) {
@@ -57,8 +61,10 @@ class TopicAbl {
       uuAppErrorMap,
     };
 
-    if (studyMaterial.existingEntities.length !== 0) {
-      uuAppErrorMap.invalidStudyMaterials = studyMaterial.invalidEntities;
+    if (dtoIn.studyMaterialList !== undefined) {
+      if (studyMaterials.invalidEntities.length !== 0) {
+        uuAppErrorMap.invalidStudyMaterialsIds = studyMaterials.invalidEntities
+      }
     }
     return dtoOut;
   }
@@ -76,11 +82,11 @@ class TopicAbl {
     let topic;
 
     try {
-      if (await this.dao.get(awid, dtoIn) === null) {
+      if (await this.dao.get(awid, dtoIn.id) === null) {
         throw new Errors.Get.InvalidId({ uuAppErrorMap });
       }
       else {
-        topic = await this.dao.get(awid, dtoIn);
+        topic = await this.dao.get(awid, dtoIn.id);
       }
     } catch (e) {
       if (e instanceof ObjectStoreError) {
@@ -105,22 +111,24 @@ class TopicAbl {
 
     let topic;
 
-    for (const file of dtoIn.studyMaterialList) {
-      try {
-        if (await this.materialsDao.get(awid, file.id) === null) {
-          throw new Errors.Update.InvalidStudyMaterialId({ uuAppErrorMap });
+    if (dtoIn.studyMaterialList !== undefined) {
+      for (const file of dtoIn.studyMaterialList) {
+        try {
+          if (await this.materialsDao.get(awid, file.id) === null) {
+            throw new Errors.Update.InvalidStudyMaterialId({ uuAppErrorMap });
+          }
         }
-      }
-      catch (e) {
-        if (e instanceof ObjectStoreError) {
-          throw new Errors.Update.TopicDaoUpdateFailed({ uuAppErrorMap }, e);
+        catch (e) {
+          if (e instanceof ObjectStoreError) {
+            throw new Errors.Update.TopicDaoUpdateFailed({ uuAppErrorMap }, e);
+          }
+          throw e;
         }
-        throw e;
       }
     }
 
     try {
-      if (await this.dao.get(awid, dtoIn) === null) {
+      if (await this.dao.get(awid, dtoIn.id) === null) {
         throw new Errors.Update.InvalidId({ uuAppErrorMap });
       }
       else {
@@ -186,12 +194,16 @@ class TopicAbl {
     let subjects = await this.subjectDao.list(awid, "name", "asc", pageInfo);
     let dataForUpdate = {};
 
-    for (const item of subjects.itemList) {
-      for (const topic of item.topicList) {
-        if (topic.id === dtoIn.id) {
-          dataForUpdate = item;
-          dataForUpdate.topicList = item.topicList.filter(x => x.id !== topic.id);
-          await this.subjectDao.update(dataForUpdate)
+    if (subjects.itemList !== undefined) {
+      for (const item of subjects.itemList) {
+        if (item.topicList !== undefined) {
+          for (const topic of item.topicList) {
+            if (topic.id === dtoIn.id) {
+              dataForUpdate = item;
+              dataForUpdate.topicList = item.topicList.filter(x => x.id !== topic.id);
+              await this.subjectDao.update(dataForUpdate)
+            }
+          }
         }
       }
     }

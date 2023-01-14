@@ -31,16 +31,22 @@ class SubjectAbl {
     );
 
     let idValidator = new IdValidator("topic");
-    let topics = await idValidator.checkIdValid(awid, dtoIn.topicList);
+    let topics;
+    let studyMaterials;
+    let data = dtoIn;
+
+    if(dtoIn.topicList !== undefined){
+      topics = await idValidator.checkIdValid(awid, dtoIn.topicList);
+      data.topicList = topics.existingEntities;
+    }
 
     idValidator = new IdValidator("studyMaterial");
-    let studyMaterials = await idValidator.checkIdValid(awid, dtoIn.studyMaterialList);
+    if(dtoIn.studyMaterialList !== undefined){
+      studyMaterials = await idValidator.checkIdValid(awid, dtoIn.studyMaterialList);
+      data.studyMaterialList = studyMaterials.existingEntities;
+    }
 
-    let data = dtoIn;
-    data.topicList = topics.existingEntities;
-    data.studyMaterialList = studyMaterials.existingEntities;
     data.awid = awid;
-
     let subject = await this.dao.create(data);
 
     const dtoOut = {
@@ -48,9 +54,20 @@ class SubjectAbl {
       uuAppErrorMap,
     };
 
-    if (topics.invalidEntities.length !== 0 || studyMaterials.invalidEntities.length !== 0) {
-      uuAppErrorMap.invalidTopicIds = topics.invalidEntities
-      uuAppErrorMap.invalidStudyMaterialIds = studyMaterials.invalidEntities
+    if(dtoIn.topicList !== undefined)
+    {
+      if(topics.invalidEntities.length !== 0 )
+      {
+        uuAppErrorMap.invalidTopicIds = topics.invalidEntities
+      }
+    }
+
+    if(dtoIn.studyMaterialList !== undefined)
+    {
+      if(studyMaterials.invalidEntities.length !== 0 )
+      {
+        uuAppErrorMap.invalidStudyMaterialsIds = studyMaterials.invalidEntities
+      }
     }
 
     return dtoOut
@@ -115,7 +132,7 @@ class SubjectAbl {
       throw e;
     }
 
-    let dtoOut = { uuAppErrorMap: uuAppErrorMap, shoppingList, data: dtoIn };
+    let dtoOut = { uuAppErrorMap: uuAppErrorMap, subject, data: dtoIn };
     return dtoOut
   }
 
@@ -148,17 +165,24 @@ class SubjectAbl {
       throw e;
     }
 
+    let topics;
+    let studyMaterials;
+    let data = dtoIn;
+
     let idValidator = new IdValidator("topic");
-    let topics = await idValidator.checkIdValid(awid, dtoIn.topicList);
+    if(dtoIn.topicList !== undefined){
+      topics = await idValidator.checkIdValid(awid, dtoIn.topicList);
+      data.topicList = topics.existingEntities;
+    }
 
     idValidator = new IdValidator("studyMaterial");
-    let studyMaterials = await idValidator.checkIdValid(awid, dtoIn.studyMaterialList);
+    if(dtoIn.studyMaterialList !== undefined){
+      studyMaterials = await idValidator.checkIdValid(awid, dtoIn.studyMaterialList);
+      data.studyMaterialList = studyMaterials.existingEntities;
+    }
 
     try {
-      let data = dtoIn;
       data.awid = awid;
-      data.studyMaterialList = studyMaterials.existingEntities;
-      data.topicList = topics.existingEntities;
       await this.dao.update(data);
     }
     catch (e) {
@@ -168,9 +192,20 @@ class SubjectAbl {
       throw e;
     }
 
-    if (topics.invalidEntities.length !== 0 || studyMaterials.invalidEntities.length !== 0) {
-      uuAppErrorMap.invalidTopicIds = topics.invalidEntities
-      uuAppErrorMap.invalidStudyMaterialIds = studyMaterials.invalidEntities
+    if(dtoIn.topicList !== undefined)
+    {
+      if(topics.invalidEntities.length !== 0 )
+      {
+        uuAppErrorMap.invalidTopicIds = topics.invalidEntities
+      }
+    }
+
+    if(dtoIn.studyMaterialList !== undefined)
+    {
+      if(studyMaterials.invalidEntities.length !== 0 )
+      {
+        uuAppErrorMap.invalidStudyMaterialsIds = studyMaterials.invalidEntities
+      }
     }
 
     let dtoOut = { uuAppErrorMap: uuAppErrorMap, data: dtoIn };

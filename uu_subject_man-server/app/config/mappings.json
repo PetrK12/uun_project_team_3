@@ -66,17 +66,16 @@
         "httpMethod": "POST",
         "type": "CMD"
       },
-      "Topic/update": {
+      "topic/update": {
         "realization": "api/controllers/TopicController.update",
         "httpMethod": "POST",
         "type": "CMD"
       },
-      "Topic/list": {
+      "topic/list": {
         "realization": "api/controllers/TopicController.list",
         "httpMethod": "GET",
         "type": "CMD"
-      }
-      ,
+      },
       "subject/create": {
         "realization": "api/controllers/SubjectController.create",
         "httpMethod": "POST",
@@ -99,6 +98,31 @@
       },
       "subject/list": {
         "realization": "api/controllers/SubjectController.list",
+        "httpMethod": "GET",
+        "type": "CMD"
+      },
+      "studyprogram/create": {
+        "realization": "api/controllers/StudyProgramController.createStudyProgram",
+        "httpMethod": "POST",
+        "type": "CMD"
+      },
+      "studyprogram/get": {
+        "realization": "api/controllers/StudyProgramController.getStudyProgram",
+        "httpMethod": "GET",
+        "type": "CMD"
+      },
+      "studyprogram/update": {
+        "realization": "api/controllers/StudyProgramController.updateStudyProgram",
+        "httpMethod": "POST",
+        "type": "CMD"
+      },
+      "studyprogram/list": {
+        "realization": "api/controllers/StudyProgramController.listStudyProgram",
+        "httpMethod": "GET",
+        "type": "CMD"
+      },
+      "studyprogram/delete": {
+        "realization": "api/controllers/StudyProgramController.deleteStudyProgram",
         "httpMethod": "GET",
         "type": "CMD"
       }

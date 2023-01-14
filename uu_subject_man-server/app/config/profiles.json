@@ -47,23 +47,23 @@
       },
       "topic/create": {
         "sysStateList": ["active"],
-        "profileList": []
+        "profileList": ["Public"]
       },
       "topic/get": {
         "sysStateList": ["active"],
-        "profileList": []
+        "profileList": ["Public"]
       },
-      "topc/delete": {
+      "topic/delete": {
         "sysStateList": ["active"],
-        "profileList": []
+        "profileList": ["Public"]
       },
       "topic/update": {
         "sysStateList": ["active"],
-        "profileList": []
+        "profileList": ["Public"]
       },
       "topic/list": {
         "sysStateList": ["active"],
-        "profileList": []
+        "profileList": ["Public"]
       },
       "subject/create": {
         "sysStateList": ["active"],
@@ -71,17 +71,37 @@
       },
       "subject/get": {
         "sysStateList": ["active"],
-        "profileList": []
+        "profileList": ["Public"]
       },
       "subject/delete": {
         "sysStateList": ["active"],
-        "profileList": []
+        "profileList": ["Public"]
       },
       "subject/update": {
         "sysStateList": ["active"],
-        "profileList": []
+        "profileList": ["Public"]
       },
       "subject/list": {
+        "sysStateList": ["active"],
+        "profileList": ["Public"]
+      },
+      "studyprogram/create": {
+        "sysStateList": ["active"],
+        "profileList": ["Public"]
+      },
+      "studyprogram/get": {
+        "sysStateList": ["active"],
+        "profileList": ["Public"]
+      },
+      "studyprogram/update": {
+        "sysStateList": ["active"],
+        "profileList": ["Public"]
+      },
+      "studyprogram/list": {
+        "sysStateList": ["active"],
+        "profileList": ["Public"]
+      },
+      "studyprogram/delete": {
         "sysStateList": ["active"],
         "profileList": ["Public"]
       }
