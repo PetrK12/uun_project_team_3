@@ -6,8 +6,10 @@ import CardMembershipOutlinedIcon from '@mui/icons-material/CardMembershipOutlin
 import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined';
 
 import SubjectTile from "../bricks/subject-tile";
+import StudyProgramTile from "../bricks/study-program-tile";
+import SubjectForm from "../bricks/subject-form";
 import Config from "./config/config.js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import SubjectDetail from "./subject-detail";
 //@@viewOff:imports
@@ -40,11 +42,31 @@ const StudyProgramDetailBrick = createVisualComponent({
 
   render(props) {
     //@@viewOn:private
-    const [detailShow, setDetailShow] = useState(false);
+    const [formShow, setFormShow] = useState(false);
     const [value, setValue] = useState(0);
+    const [subjects, setSubjects] = useState({})
     const handleChange = (event, newValue) => {
       setValue(newValue);
     };
+
+    useEffect(() => {
+      // TODO use BE to load subjects
+
+      setSubjects(props.subjects)
+    }, [])
+
+    function handleDelete(subjectId) {
+      // TODO use BE to delete subject
+      let tmpSubjects
+
+      for (const studyProgram in subjects) {
+        for (const subject in studyProgram) {
+          if (subject.id != subjectId) {
+            tmpSubjects[studyProgram] += subject
+          }
+        }
+      }
+    }
 
     function a11yProps(index) {
       return {
@@ -55,9 +77,8 @@ const StudyProgramDetailBrick = createVisualComponent({
 
     function getSubjectHtmlList(subjectList) {
       const subjectHtmlList = [];
-
       subjectList.forEach(subject => {
-        subjectHtmlList.push(<SubjectTile subject={subject} setDetailShow={setDetailShow}/>)
+        subjectHtmlList.push(<SubjectTile subject={subject} handleDelete={handleDelete}/>)
       })
       return subjectHtmlList;
     }
@@ -110,28 +131,11 @@ const StudyProgramDetailBrick = createVisualComponent({
     //@@viewOff:interface
 
     //@@viewOn:render
-    const attrs = Utils.VisualComponent.getAttrs(props);
+    //const attrs = Utils.VisualComponent.getAttrs(props);
     return (
-      <div {...attrs}>
-        <Box padding={3} ml={20} >
-          <Stack spacing={4}>
-            <Typography variant="h2" color="primary">{props.studyProgram.name}</Typography>
-            <Stack direction="row" spacing={6}>
-              <Stack direction="row" spacing={1}>
-                <WorkspacePremiumOutlinedIcon color="primary" />
-                <Typography>{props.studyProgram.degree}ský stupeň studia</Typography>
-              </Stack>
-              <Stack direction="row" spacing={1}>
-                <LanguageOutlinedIcon color="primary"/>
-                <Typography>{props.studyProgram.language} jazyk</Typography>
-              </Stack>
-              <Stack direction="row" spacing={1}>
-                <CardMembershipOutlinedIcon color="primary"/>
-                <Typography>{props.studyProgram.numberOfCredits}</Typography>
-              </Stack>
-            </Stack>
-          </Stack>
-        </Box>
+      <>
+        <SubjectForm formShow={formShow} setFormShow={setFormShow}/>
+        <StudyProgramTile studyProgram={props.studyProgram}/>
 
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" centered>
@@ -142,13 +146,13 @@ const StudyProgramDetailBrick = createVisualComponent({
         </Box>
 
         <TabPanel value={value} index={0}>
-          {subjectListComponent(props.subjects.mandatory)}
+          {subjectListComponent(subjects.mandatory)}
         </TabPanel>
         <TabPanel value={value} index={1}>
-          {subjectListComponent(props.subjects.compulsoryOptional)}
+          {subjectListComponent(subjects.compulsoryOptional)}
         </TabPanel>
         <TabPanel value={value} index={2}>
-          {subjectListComponent(props.subjects.optional)}
+          {subjectListComponent(subjects.optional)}
         </TabPanel>
 
         <Fab color="primary" aria-label="add"
@@ -157,7 +161,8 @@ const StudyProgramDetailBrick = createVisualComponent({
         >
           <AddIcon />
         </Fab>
-      </div>
+      {/*</div>*/}
+      </>
     );
     //@@viewOff:render
   },

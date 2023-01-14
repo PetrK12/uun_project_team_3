@@ -130,7 +130,7 @@ const subjects =
     businessManagement: {
       mandatory: [
         {
-          id: 1,
+          id: 11,
           name: "Management",
           goal: "Cílem předmětu je poskytnout studentům znalosti v oblasti managementu.",
           teacher: "Jan Novák",
@@ -276,7 +276,7 @@ const studyPrograms = {
 
 let StudyProgramDetail = createVisualComponent({
   //@@viewOn:statics
-  uu5Tag: Config.TAG + "SoftwareDevelopment",
+  uu5Tag: Config.TAG + "StudyProgramDetail",
   //@@viewOff:statics
 
   //@@viewOn:propTypes
@@ -319,10 +319,10 @@ let StudyProgramDetail = createVisualComponent({
     //@@viewOn:render
     const attrs = Utils.VisualComponent.getAttrs(props);
     return (
-      <div {...attrs}>
+      <>
         <RouteBar />
         <StudyProgramDetailBrick studyProgram={studyPrograms[props.studyProgram]} subjects={subjects[props.studyProgram]} />
-      </div>
+      </>
     );
     //@@viewOff:render
   },

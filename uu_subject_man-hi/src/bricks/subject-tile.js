@@ -38,12 +38,13 @@ const SubjectTile = createVisualComponent({
     //@@viewOn:private
     const [detailShow, setDetailShow] = useState(false);
 
+    function handleDelete() {
+
+    }
     //@@viewOff:private
 
     //@@viewOn:interface
     //@@viewOff:interface
-
-    // TODO subject detail move to study-program-brick
 
     //@@viewOn:render
     return (
@@ -53,10 +54,10 @@ const SubjectTile = createVisualComponent({
         <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
           <CardContent sx={{ flexGrow: 1 }}>
             <Stack spacing={1}>
-              <Typography variant="h6" component="div">
+              <Typography variant="h6">
                 {props.subject.name}<br />
               </Typography>
-              <Typography variant="body2" component="div">
+              <Typography variant="body2">
                 {props.subject.credits} kreditů<br />
               </Typography>
               <Typography variant="body2">
@@ -66,9 +67,9 @@ const SubjectTile = createVisualComponent({
           </CardContent>
           <CardActions >
             <Button size="small" onClick={() => setDetailShow(true)}>Více informací</Button>
+            <Button size="small" onClick={() => props.handleDelete(props.subject.id)}>Smazat</Button>
           </CardActions>
         </Card>
-
 
       </Grid>
     );

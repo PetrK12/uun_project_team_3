@@ -1,13 +1,23 @@
 //@@viewOn:imports
 import { Utils, createVisualComponent, PropTypes, useScreenSize } from "uu5g05";
-
 import {Box, Card, CardContent, Stack, Grid, Typography, CardActions, Button, Modal} from "@mui/material";
+import * as React from "react"
 
 import Config from "./config/config.js";
 
 //@@viewOff:imports
 
 //@@viewOn:constants
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 600,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+};
 //@@viewOff:constants
 
 //@@viewOn:css
@@ -43,12 +53,24 @@ const SubjectDetail = createVisualComponent({
     //@@viewOn:render
     return (
       <Modal open={props.detailShow} onClose={() => props.setDetailShow(false)}>
-        <Card >
+        <Card sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             {props.subject.name}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             {props.subject.goal}
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            {props.subject.teacher}
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            {props.subject.degree}
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            {props.subject.credits}
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            {props.subject.studyMaterialList}
           </Typography>
         </Card>
       </Modal>
