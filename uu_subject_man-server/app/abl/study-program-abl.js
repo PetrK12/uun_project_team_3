@@ -192,13 +192,13 @@ class StudyProgramAbl {
     let subjectIds = [];
 
     let i = 0;
-    while (i < dtoIn.subjectList.length) {
-      subjectIds.push({"id": dtoIn.subjectList[i].id})
-      i++;
-  }
+  //   while (i < dtoIn.subjectList.length) {
+  //     subjectIds.push({"id": dtoIn.subjectList[i].id})
+  //     i++;
+  // }
 
-    let idValidator = new IdValidator("subject");
-    let subject = await idValidator.checkIdValid(awid, subjectIds);
+  //   let idValidator = new IdValidator("subject");
+  //   let subject = await idValidator.checkIdValid(awid, subjectIds);
     let studyProgram;
 
     try {
@@ -208,7 +208,10 @@ class StudyProgramAbl {
       else {
         let data = dtoIn;
         data.awid = awid;
-        data.subjectList = subject.existingEntities;
+        if(dtoIn.subjectList !== undefined)
+        {
+          data.subjectList = subject.existingEntities;
+        }
         studyProgram = await this.dao.create(data);
       }
     } catch (e) {
@@ -224,9 +227,9 @@ class StudyProgramAbl {
       uuAppErrorMap,
     };
 
-    if (subject.existingEntities.length !== 0) {
-      uuAppErrorMap.invalidSubjects = subject.invalidEntities;
-    }
+    // if (subject.existingEntities.length !== 0) {
+    //   uuAppErrorMap.invalidSubjects = subject.invalidEntities;
+    // }
     return dtoOut;
   }
 

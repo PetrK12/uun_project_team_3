@@ -87,6 +87,13 @@ const Update = {
       this.message = "Material with given Id does not exists.";
     }
   },
+  InvalidDtoIn: class extends SubjectManUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Update.UC_CODE}invalidDtoIn`;
+      this.message = "Dto In is not valid.";
+    }
+  },
 };
 
 const List = {

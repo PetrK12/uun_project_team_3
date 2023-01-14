@@ -28,7 +28,7 @@
 
   const subjectUpdateDtoInType = shape({
     id: id().isRequired(),
-    name: uu5String(512).isRequired(),
+    name: uu5String(512),
     goal: uu5String(512),
     teacher: uu5String(512),
     degree: uu5String(512),

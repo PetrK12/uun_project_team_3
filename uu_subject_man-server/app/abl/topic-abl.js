@@ -62,8 +62,8 @@ class TopicAbl {
     };
 
     if (dtoIn.studyMaterialList !== undefined) {
-      if (studyMaterials.invalidEntities.length !== 0) {
-        uuAppErrorMap.invalidStudyMaterialsIds = studyMaterials.invalidEntities
+      if (studyMaterial.invalidEntities.length !== 0) {
+        uuAppErrorMap.invalidStudyMaterialsIds = studyMaterial.invalidEntities
       }
     }
     return dtoOut;
