@@ -11,6 +11,13 @@ const WARNINGS = {
   },
 };
 
+const DEFAULTS = {
+  sortBy: "name",
+  order: "asc",
+  pageIndex: 0,
+  pageSize: 100,
+};
+
 class SubjectAbl {
 
   constructor() {
@@ -212,6 +219,42 @@ class SubjectAbl {
     return dtoOut
   }
 
+  async list(awid, dtoIn) {
+    let uuAppErrorMap;
+
+    const validationResult = this.validator.validate("subjectListDtoInType", dtoIn);
+    uuAppErrorMap = ValidationHelper.processValidationResult(
+      dtoIn,
+      validationResult,
+      WARNINGS.initUnsupportedKeys.code,
+      Errors.Create.InvalidDtoIn
+    );
+
+    if (!dtoIn.sortBy) dtoIn.sortBy = DEFAULTS.sortBy;
+    if (!dtoIn.order) dtoIn.order = DEFAULTS.order;
+    if (!dtoIn.pageInfo) dtoIn.pageInfo = {};
+    if (!dtoIn.pageInfo.pageSize) dtoIn.pageInfo.pageSize = DEFAULTS.pageSize;
+    if (!dtoIn.pageInfo.pageIndex) dtoIn.pageInfo.pageIndex = DEFAULTS.pageIndex;
+
+    let list;
+    try{
+      list = await this.dao.list(awid, dtoIn.sortBy, dtoIn.order, dtoIn.pageInfo);
+    }
+    catch(e)
+    {
+      if (e instanceof ObjectStoreError) {
+        throw new Errors.List.DaoListFailed({ uuAppErrorMap }, e);
+      }
+      throw e;
+    }
+
+    const dtoOut = {
+      ...list,
+      uuAppErrorMap,
+      dtoIn
+    };
+    return dtoOut
+  }
 }
 
 module.exports = new SubjectAbl();

@@ -91,7 +91,14 @@ const Update = {
 
 const List = {
   UC_CODE: `${SUBJECT_ERROR_PREFIX}list/`,
-  
+
+  DaoListFailed: class extends SubjectManUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${List.UC_CODE}daoFailed`;
+      this.message = "List records from database failed.";
+    }
+  },
 };
 
 module.exports = {

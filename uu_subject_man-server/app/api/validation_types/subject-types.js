@@ -43,3 +43,13 @@
           id: id()
     })),
   });
+
+  const subjectListDtoInType = shape({
+    sortBy: oneOf(["name", "uuIdentity"]),
+    order: oneOf(["asc", "desc"]),
+    categoryIdList: array(id(), 1, 10),
+    pageInfo: shape({
+      pageIndex: integer(),
+      pageSize: integer(),
+    }),
+  });
