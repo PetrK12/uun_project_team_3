@@ -1,5 +1,5 @@
 //@@viewOn:imports
-import {Utils, createVisualComponent, useEffect, useState} from "uu5g05";
+import {Utils, createVisualComponent, useEffect, useState, useRoute} from "uu5g05";
 import { withRoute } from "uu_plus4u5g02-app";
 
 import Config from "./config/config.js";
@@ -32,7 +32,6 @@ const studyProgramsDef = [
     subjectList: ["147258", "741963"]
   }
 ]
-
 //@@viewOff:constants
 
 //@@viewOn:css
@@ -81,8 +80,18 @@ let StudyPrograms = createVisualComponent({
 
     //const navigate = useNavigate();
 
-    const handleClick = () => {
-      // TODO
+    const [, setRoute] = useRoute();
+
+
+    function getStudyProgramRouteName(name) {
+      switch(name) {
+        case "Business Management":
+          return "businessManagement"
+        case "Softwarový vývoj":
+          return "softwareDevelopment"
+        default:
+          return "studyPrograms"
+      }
     }
 
     function getStudyProgramHtmlList() {
@@ -90,7 +99,7 @@ let StudyPrograms = createVisualComponent({
       studyPrograms.forEach(studyProgram => {
         studyProgramHtmlList.push(
           <Card>
-            <CardActionArea onClick={handleClick}>
+            <CardActionArea onClick = {() => setRoute(getStudyProgramRouteName(studyProgram.name))}>
               <CardContent>
                 <StudyProgramTile studyProgram={studyProgram}/>
               </CardContent>
