@@ -5,7 +5,7 @@ import Plus4U5 from "uu_plus4u5g02";
 import Plus4U5App from "uu_plus4u5g02-app";
 
 import Config from "./config/config.js";
-import SoftwareDevelopment from "../routes/software-development.js";
+import StudyProgramDetail from "../routes/study-program-detail.js";
 //@@viewOff:imports
 
 //@@viewOn:constants
@@ -13,9 +13,13 @@ const About = Utils.Component.lazy(() => import("../routes/about.js"));
 const InitAppWorkspace = Utils.Component.lazy(() => import("../routes/init-app-workspace.js"));
 const ControlPanel = Utils.Component.lazy(() => import("../routes/control-panel.js"));
 
+
+// TODO softwareDevelopment -> studyProgramDetail and pass parameters for softwareDevelopment
 const ROUTE_MAP = {
   "": { redirect: "softwareDevelopment" },
-  softwareDevelopment: (props) => <SoftwareDevelopment {...props} />,
+  softwareDevelopment: (props) => <StudyProgramDetail {...props} studyProgram="softwareDevelopment" />,
+  businessManagement: (props) => <StudyProgramDetail {...props} studyProgram="businessManagement" />,
+  //softwareDevelopment: (props) => <StudyProgramDetail {...props} />,
   about: (props) => <About {...props} />,
   "sys/uuAppWorkspace/initUve": (props) => <InitAppWorkspace {...props} />,
   controlPanel: (props) => <ControlPanel {...props} />,

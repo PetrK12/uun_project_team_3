@@ -1,6 +1,6 @@
 //@@viewOn:imports
 import { Utils, createVisualComponent, PropTypes, useScreenSize } from "uu5g05";
-import { Container, Stack, Box, Tabs, Tab, Grid, Typography, CircularProgress } from "@mui/material";
+import {Container, Stack, Box, Tabs, Tab, Grid, Typography, CircularProgress, Fab} from "@mui/material";
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined';
 import CardMembershipOutlinedIcon from '@mui/icons-material/CardMembershipOutlined';
 import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined';
@@ -8,6 +8,8 @@ import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOu
 import SubjectTile from "../bricks/subject-tile";
 import Config from "./config/config.js";
 import { useState } from "react";
+import AddIcon from "@mui/icons-material/Add";
+import SubjectDetail from "./subject-detail";
 //@@viewOff:imports
 
 //@@viewOn:constants
@@ -19,7 +21,7 @@ import { useState } from "react";
 //@@viewOn:helpers
 //@@viewOff:helpers
 
-const StudyProgramDetail = createVisualComponent({
+const StudyProgramDetailBrick = createVisualComponent({
   //@@viewOn:statics
   uu5Tag: Config.TAG + "StudyProgramDetail",
   //@@viewOff:statics
@@ -38,6 +40,7 @@ const StudyProgramDetail = createVisualComponent({
 
   render(props) {
     //@@viewOn:private
+    const [detailShow, setDetailShow] = useState(false);
     const [value, setValue] = useState(0);
     const handleChange = (event, newValue) => {
       setValue(newValue);
@@ -54,7 +57,7 @@ const StudyProgramDetail = createVisualComponent({
       const subjectHtmlList = [];
 
       subjectList.forEach(subject => {
-        subjectHtmlList.push(<SubjectTile subject={subject}/>)
+        subjectHtmlList.push(<SubjectTile subject={subject} setDetailShow={setDetailShow}/>)
       })
       return subjectHtmlList;
     }
@@ -124,7 +127,7 @@ const StudyProgramDetail = createVisualComponent({
               </Stack>
               <Stack direction="row" spacing={1}>
                 <CardMembershipOutlinedIcon color="primary"/>
-                <Typography>250 kreditů</Typography>
+                <Typography>{props.studyProgram.numberOfCredits}</Typography>
               </Stack>
             </Stack>
           </Stack>
@@ -147,6 +150,13 @@ const StudyProgramDetail = createVisualComponent({
         <TabPanel value={value} index={2}>
           {subjectListComponent(props.subjects.optional)}
         </TabPanel>
+
+        <Fab color="primary" aria-label="add"
+             sx={{ position: 'absolute', bottom: 50, right: 50 }}
+             onClick={() => setFormShow(true)}
+        >
+          <AddIcon />
+        </Fab>
       </div>
     );
     //@@viewOff:render
@@ -154,8 +164,8 @@ const StudyProgramDetail = createVisualComponent({
 });
 
 //@@viewOn:exports
-export { StudyProgramDetail };
-export default StudyProgramDetail;
+export { StudyProgramDetailBrick };
+export default StudyProgramDetailBrick;
 //@@viewOff:exports
 
 /*

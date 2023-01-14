@@ -67,7 +67,7 @@
       },
       "subject/create": {
         "sysStateList": ["active"],
-        "profileList": []
+        "profileList": ["Public"]
       },
       "subject/get": {
         "sysStateList": ["active"],

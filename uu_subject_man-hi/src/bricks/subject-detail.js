@@ -1,7 +1,8 @@
 //@@viewOn:imports
 import { Utils, createVisualComponent, PropTypes, useScreenSize } from "uu5g05";
 
-import {Card, CardContent, Stack, Grid, Typography, CardActions, Button, Modal} from "@mui/material";
+import {Box, Card, CardContent, Stack, Grid, Typography, CardActions, Button, Modal} from "@mui/material";
+
 import Config from "./config/config.js";
 
 //@@viewOff:imports
@@ -41,10 +42,15 @@ const SubjectDetail = createVisualComponent({
 
     //@@viewOn:render
     return (
-      <Modal show={!!props.detailShow} onHide={() => props.setDetailShow(false)}>
-        <div>
-          test
-        </div>
+      <Modal open={props.detailShow} onClose={() => props.setDetailShow(false)}>
+        <Card >
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            {props.subject.name}
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            {props.subject.goal}
+          </Typography>
+        </Card>
       </Modal>
     );
     //@@viewOff:render

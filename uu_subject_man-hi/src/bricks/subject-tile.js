@@ -1,8 +1,9 @@
 //@@viewOn:imports
 import { Utils, createVisualComponent, PropTypes, useScreenSize } from "uu5g05";
-import {Card, CardContent, Stack, Grid, Typography, CardActions, Button} from "@mui/material";
+import {Card, CardContent, Stack, Grid, Typography, CardActions, Button, Fab,} from "@mui/material";
 import { useState } from "react";
 
+import AddIcon from '@mui/icons-material/Add';
 import Config from "./config/config.js";
 import SubjectDetail from "./subject-detail";
 //@@viewOff:imports
@@ -42,6 +43,8 @@ const SubjectTile = createVisualComponent({
     //@@viewOn:interface
     //@@viewOff:interface
 
+    // TODO subject detail move to study-program-brick
+
     //@@viewOn:render
     return (
       <Grid item key={props.subject.id} xs={12} sm={6} md={4}>
@@ -65,6 +68,8 @@ const SubjectTile = createVisualComponent({
             <Button size="small" onClick={() => setDetailShow(true)}>Více informací</Button>
           </CardActions>
         </Card>
+
+
       </Grid>
     );
     //@@viewOff:render
