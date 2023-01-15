@@ -56,7 +56,7 @@ const StudyProgramDetailBrick = createVisualComponent({
         .then(response => response.json())
         .then(data => {
           if (data.itemList[0].profile === "Executives") {
-            //setIsTeacher(true)
+            //setIsTeacher(true) // DEFAULT
             setIsTeacher(true)
           } else {
             setIsTeacher(false)

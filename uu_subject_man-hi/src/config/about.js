@@ -29,11 +29,6 @@ const About = {
       role: "Developer",
     },
     {
-      name: "Diana Radova",
-      uuIdentity: "5883-8023-1",
-      role: "Developer",
-    },
-    {
       name: "Lenka Kalašová",
       uuIdentity: "2377-8003-1",
       role: "Developer",

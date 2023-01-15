@@ -55,7 +55,7 @@ const SubjectTile = createVisualComponent({
     //@@viewOn:render
     return (
       <Grid item key={props.subject.id} xs={12} sm={6} md={4}>
-        <SubjectDetail subject={props.subject} detailShow={detailShow} setDetailShow={setDetailShow}/>
+        <SubjectDetail subject={props.subject} detailShow={detailShow} setDetailShow={setDetailShow} showEdit={props.showDelete}/>
 
         <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
           <CardContent sx={{ flexGrow: 1 }}>

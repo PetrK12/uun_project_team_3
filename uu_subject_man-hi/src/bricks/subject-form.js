@@ -1,5 +1,6 @@
 //@@viewOn:imports
 import {
+  Alert,
   Box,
   Card,
   CardContent,
@@ -16,7 +17,6 @@ import {
   FormControl, OutlinedInput, Chip, useTheme
 } from "@mui/material";
 import Form from "react-bootstrap/Form"
-import Alert from "@mui/material/Alert";
 import * as React from "react";
 import { Utils, createVisualComponent, PropTypes, useScreenSize, useState, useEffect, useCallback } from "uu5g05";
 import Config from "./config/config";
@@ -74,6 +74,7 @@ const SubjectForm = createVisualComponent({
     const [formData, setFormData] = useState({});
     const [language, setLanguage] = useState('')
     const [degree, setDegree] = useState('')
+    const [error, setError] = useState(false)
     const [selectedStudyMaterials, setSelectedStudyMaterials] = useState([])
     const [studyMaterials, setStudyMaterials] = useState([])
 
@@ -119,12 +120,13 @@ const SubjectForm = createVisualComponent({
       })
         .then(response => {
           if (response.status >= 400) {
+            setError(true)
             throw new Error(response.json())
           }
           return response.json()
         })
         .then(data => {
-          let newSubject = {"id": data.id, "name": data.name}
+          let newSubject = {"id": data.id, ...formData}
 
           let type
           let tmpSubjects = JSON.parse(JSON.stringify(props.subjects))
@@ -160,11 +162,10 @@ const SubjectForm = createVisualComponent({
                 console.log(response.json())
                 throw new Error(response.json())
               }
+              props.setFormShow(false)
               return response.json()
-          })
+            })
         })
-
-      props.setFormShow(false)
     }
 
     function getStyles(name, personName, theme) {
@@ -176,6 +177,14 @@ const SubjectForm = createVisualComponent({
       };
     }
 
+    function showAlert() {
+        if (error) {
+          return (<Alert show={error} severity="error">Nepodařilo se předmět vytvořit. Pole název musí být vyplněno!</Alert>)
+        }
+
+        return (<></>)
+    }
+
     //@@viewOff:private
 
     //@@viewOn:interface
@@ -185,8 +194,12 @@ const SubjectForm = createVisualComponent({
 
     //@@viewOn:render
     return (
-      <Modal open={props.formShow} onClose={() => props.setFormShow(false)}>
+      <Modal open={props.formShow} onClose={() => {
+        setError(false)
+        props.setFormShow(false)
+      }}>
         <Card sx={style}>
+          {showAlert()}
           <CardContent sx={{ flexGrow: 1 }}>
             <Stack spacing={4}>
               <TextField id="name" label="Název" variant="outlined" onChange={handleChange}/>
@@ -235,39 +248,6 @@ const SubjectForm = createVisualComponent({
   },
 });
 //@@viewOn:exports
-
-/*
-              <FormControl sx={{ m: 1, width: 300 }}>
-                <InputLabel id="studyMaterials">Studijní materiály</InputLabel>
-                <Select
-                  labelId="studyMaterials"
-                  id="studyMaterials"
-                  multiple
-                  value={selectedStudyMaterials}
-                  onChange={handleStudyMaterialChange}
-                  input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-                  renderValue={(selected) => (
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                      {selected.map((value) => (
-                        <Chip key={value} label={value} />
-                      ))}
-                    </Box>
-                  )}
-                  MenuProps={MenuProps}
-                >
-                  {studyMaterials.map((name) => (
-                    <MenuItem
-                      key={name}
-                      value={name}
-                      style={getStyles(name, selectedStudyMaterials, theme)}
-                    >
-                      {name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
- */
 
 //@@viewOn:exports
 export { SubjectForm };

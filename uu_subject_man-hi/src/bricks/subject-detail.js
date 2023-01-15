@@ -105,6 +105,16 @@ const SubjectDetail = createVisualComponent({
         })
     }, [])
 
+    function showEdit() {
+      if (props.showEdit) {
+        return (
+          <Button size="small" onClick={() => {}}>Upravit</Button>
+        )
+      } else {
+        return (<></>)
+      }
+    }
+
     function getStudyMaterials(studyMaterials) {
       if (studyMaterials === undefined) { return (<></>) }
 
@@ -225,6 +235,9 @@ const SubjectDetail = createVisualComponent({
             </Stack>
 
           </CardContent>
+          <CardActions >
+            {showEdit()}
+          </CardActions>
         </Card>
       </Modal>
     );
