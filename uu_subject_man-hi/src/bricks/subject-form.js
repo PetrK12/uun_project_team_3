@@ -1,12 +1,27 @@
 //@@viewOn:imports
-import {Box, Card, CardContent, Stack, Grid, Typography, CardActions, Button, Modal, TextField} from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Stack,
+  Grid,
+  Typography,
+  CardActions,
+  Button,
+  Modal,
+  TextField,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl, OutlinedInput, Chip, useTheme
+} from "@mui/material";
 import Form from "react-bootstrap/Form"
-import { useState } from "react"
 import Alert from "@mui/material/Alert";
 import * as React from "react";
-import { Utils, createVisualComponent, PropTypes, useScreenSize } from "uu5g05";
+import { Utils, createVisualComponent, PropTypes, useScreenSize, useState, useEffect, useCallback } from "uu5g05";
 import Config from "./config/config";
 import AddIcon from "@mui/icons-material/Add";
+import studyPrograms from "../routes/study-programs";
 
 //@@viewOff:imports
 
@@ -20,6 +35,17 @@ const style = {
   bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
+};
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
 };
 //@@viewOff:constants
 
@@ -39,7 +65,23 @@ const SubjectForm = createVisualComponent({
 
   render(props) {
     //@@viewOn:private
+    if (!props.studyProgram) {
+      return null
+    }
+
+    const theme = useTheme();
+
     const [formData, setFormData] = useState({});
+    const [language, setLanguage] = useState('')
+    const [degree, setDegree] = useState('')
+    const [selectedStudyMaterials, setSelectedStudyMaterials] = useState([])
+    const [studyMaterials, setStudyMaterials] = useState([])
+
+    useEffect(() => {
+      // TODO use BE to load subjects
+      console.log(props.studyProgram)
+      setStudyMaterials(["test", "ahoj"])
+    }, [])
 
     const handleChange = (event) => {
       let tmpData = formData
@@ -47,16 +89,99 @@ const SubjectForm = createVisualComponent({
       setFormData(tmpData);
     };
 
-    function createSubject() {
-      // TODO create subject
+    const handleLanguageChange = (event) => {
+      setLanguage(event.target.value)
+      let tmpData = formData
+      tmpData["language"] = event.target.value
+      setFormData(tmpData);
+    };
 
+    const handleDegreeChange = (event) => {
+      setDegree(event.target.value)
+      let tmpData = formData
+      tmpData["degree"] = event.target.value
+      setFormData(tmpData);
+    };
+
+    const handleStudyMaterialChange = (event) => {
+      setSelectedStudyMaterials(event.target.value)
+    };
+
+    //function createSubject() {
+    //const createSubject = useCallback( () => {
+      const createSubject = () => {
+        fetch("http://localhost:8080/uu-subject-man/22222222222222222222222222222222/subject/create", {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: {
+          "Content-type": "application/json"
+        }
+      })
+        .then(response => {
+          if (response.status >= 400) {
+            throw new Error(response.json())
+          }
+          return response.json()
+        })
+        .then(data => {
+          let newSubject = {"id": data.id, "name": data.name}
+
+          let type
+          let tmpSubjects = JSON.parse(JSON.stringify(props.subjects))
+
+          if (props.currentTab === 0) {
+            type = "mandatory"
+            tmpSubjects.mandatory.push(newSubject)
+          } else if (props.currentTab === 1) {
+            type = "compulsory"
+            tmpSubjects.compulsoryOptional.push(newSubject)
+          } else if (props.currentTab === 2) {
+            type = "optional"
+            tmpSubjects.optional.push(newSubject)
+          }
+
+          props.setSubjectList(tmpSubjects)
+
+          return {"type": type, id: data.id}
+        })
+        .then(newSubject => {
+          let updatedStudyProgram = JSON.parse(JSON.stringify(props.studyProgram))
+          updatedStudyProgram.subjectList.push(newSubject)
+          props.setStudyProgram(updatedStudyProgram)
+          fetch("http://localhost:8080/uu-subject-man/22222222222222222222222222222222/studyprogram/update", {
+            method: "POST",
+            body: JSON.stringify({"id": updatedStudyProgram.id, "subjectList": updatedStudyProgram.subjectList}),
+            headers: {
+              "Content-type": "application/json"
+            }
+          })
+            .then(response => {
+              if (response.status >= 400) {
+                console.log(response.json())
+                throw new Error(response.json())
+              }
+              return response.json()
+          })
+        })
 
       props.setFormShow(false)
     }
+
+    function getStyles(name, personName, theme) {
+      return {
+        fontWeight:
+          personName.indexOf(name) === -1
+            ? theme.typography.fontWeightRegular
+            : theme.typography.fontWeightMedium,
+      };
+    }
+
     //@@viewOff:private
 
     //@@viewOn:interface
     //@@viewOff:interface
+
+    // TODO topics
 
     //@@viewOn:render
     return (
@@ -69,13 +194,39 @@ const SubjectForm = createVisualComponent({
               <TextField id="teacher" label="Učitel" variant="outlined" onChange={handleChange}/>
               <TextField id="credits" label="Počet kreditů" variant="outlined" onChange={handleChange}/>
 
-              <TextField id="language" label="Jazyk" variant="outlined" onChange={handleChange}/>
-              <TextField id="studyMaterials" label="Studijní materiály" variant="outlined" onChange={handleChange}/>
-              <TextField id="topics" label="Topiky" variant="outlined" onChange={handleChange}/>
+              <FormControl fullWidth>
+                <InputLabel id="language">Jazyk</InputLabel>
+                <Select
+                  labelId="language"
+                  id="language"
+                  value={language}
+                  label="Jazyk"
+                  onChange={handleLanguageChange}
+                >
+                  <MenuItem value={"Český"}>Český</MenuItem>
+                  <MenuItem value={"Anglický"}>Anglický</MenuItem>
+                </Select>
+              </FormControl>
+
+              <FormControl fullWidth>
+                <InputLabel id="degree">Stupeň studia</InputLabel>
+                <Select
+                  labelId="degree"
+                  id="degree"
+                  value={degree}
+                  label="Stupeň studia"
+                  onChange={handleDegreeChange}
+                >
+                  <MenuItem value={"Bakalářský"}>Bakalářský</MenuItem>
+                  <MenuItem value={"Magisterský"}>Magisterský</MenuItem>
+                </Select>
+              </FormControl>
+
+              <TextField id="topics" label="Témata" variant="outlined" onChange={handleChange}/>
             </Stack>
           </CardContent>
           <CardActions >
-            <Button size="small" onClick={() => createSubject()}><AddIcon /></Button>
+            <Button size="small" onClick={createSubject}>Přidat</Button>
           </CardActions>
         </Card>
       </Modal>
@@ -86,21 +237,35 @@ const SubjectForm = createVisualComponent({
 //@@viewOn:exports
 
 /*
-
-    name: uu5String(512).isRequired(),
-    goal: uu5String(512),
-    teacher: uu5String(512),
-    degree: uu5String(512),
-    language: uu5String(512),
-    credits: integer(),
-    studyMaterialList: array(
-      shape({
-          id: id()
-    })),
-    topicList: array(
-      shape({
-          id: id()
-    })),
+              <FormControl sx={{ m: 1, width: 300 }}>
+                <InputLabel id="studyMaterials">Studijní materiály</InputLabel>
+                <Select
+                  labelId="studyMaterials"
+                  id="studyMaterials"
+                  multiple
+                  value={selectedStudyMaterials}
+                  onChange={handleStudyMaterialChange}
+                  input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+                  renderValue={(selected) => (
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                      {selected.map((value) => (
+                        <Chip key={value} label={value} />
+                      ))}
+                    </Box>
+                  )}
+                  MenuProps={MenuProps}
+                >
+                  {studyMaterials.map((name) => (
+                    <MenuItem
+                      key={name}
+                      value={name}
+                      style={getStyles(name, selectedStudyMaterials, theme)}
+                    >
+                      {name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
 
  */
 

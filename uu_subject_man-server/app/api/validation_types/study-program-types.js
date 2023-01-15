@@ -15,7 +15,7 @@ const studyProgramCreateDtoInType = shape({
     //         id: id()
     //   }))
   });
-  
+
   const studyProgramGetDtoInType = shape({
     id: id().isRequired(),
   });
@@ -42,6 +42,7 @@ const studyProgramCreateDtoInType = shape({
     numberOfCredits: integer(),
     subjectList: array(
         shape({
-            id: id()
-      }))
+            id: id(),
+            type: uu5String(512)
+        }))
   });

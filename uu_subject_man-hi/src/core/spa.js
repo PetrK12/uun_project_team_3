@@ -16,8 +16,8 @@ const ControlPanel = Utils.Component.lazy(() => import("../routes/control-panel.
 
 const ROUTE_MAP = {
   "": { redirect: "studyPrograms" },
-  softwareDevelopment: (props) => <StudyProgramDetail {...props} studyProgram="softwareDevelopment" />,
-  businessManagement: (props) => <StudyProgramDetail {...props} studyProgram="businessManagement" />,
+  softwareDevelopment: (props) => <StudyProgramDetail {...props} studyProgram="63c2d0c49e2b6b6388db0eae" />,
+  businessManagement: (props) => <StudyProgramDetail {...props} studyProgram="63c2d34e9e2b6b6388db0ece" />,
   studyPrograms: (props) => <StudyPrograms {...props}/>,
   about: (props) => <About {...props} />,
   "sys/uuAppWorkspace/initUve": (props) => <InitAppWorkspace {...props} />,

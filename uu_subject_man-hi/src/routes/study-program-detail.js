@@ -1,5 +1,5 @@
 //@@viewOn:imports
-import {Utils, createVisualComponent, useEffect} from "uu5g05";
+import {Utils, createVisualComponent, useEffect, useState} from "uu5g05";
 import { withRoute } from "uu_plus4u5g02-app";
 
 import Config from "./config/config.js";
@@ -247,24 +247,6 @@ const subjects =
 
 }
 
-const studyPrograms = {
-  softwareDevelopment: {
-    studyProgramId: "1",
-    name: "Softwarový vývoj",
-    degree: "Bakalář",
-    language: "Český",
-    numberOfCredits: 260,
-    subjectList: ["147258", "741963"]
-  },
-  businessManagement: {
-    studyProgramId: "1",
-    name: "Business Management",
-    degree: "Bakalář",
-    language: "Český",
-    numberOfCredits: 250,
-    subjectList: ["147258", "741963"]
-  },
-}
 
 //@@viewOff:constants
 
@@ -289,28 +271,45 @@ let StudyProgramDetail = createVisualComponent({
 
   render(props) {
     //@@viewOn:private
+    const [studyProgram, setStudyProgram] = useState({})
+    const [subjectList, setSubjectList] = useState({})
 
-    // TODO connect to backend
+    // Load study program
     useEffect(() => {
-      //setVideoList(videos)
-
-      /*
-      fetch('/video/list')
-        .then(response => response.json())
-        .then(data => setVideoList(data))
-
-      fetch("topic/list")
+      fetch("http://localhost:8080/uu-subject-man/22222222222222222222222222222222/studyprogram/get?id=" + props.studyProgram)
         .then(response => response.json())
         .then(data => {
-          let names = []
-          data.forEach(topic => {
-            names.push(topic.name)
-          })
-          setTopicListNames(names)
-          setTopicList(data)
+          //console.log(data.studyProgram)
+          setStudyProgram(data.studyProgram)
+          return (data.studyProgram)
         })
-       */
+        .then(tmpStudyProgram =>{
+          fetch("http://localhost:8080/uu-subject-man/22222222222222222222222222222222/subject/list")
+            .then(response => response.json())
+            .then(data => {
+              let tmpSubjectList = {"mandatory": [], "compulsoryOptional": [], "optional": []}
+
+              tmpStudyProgram.subjectList.forEach(subject => {
+
+                const found = data.itemList.find(x => x.id === subject.id)
+                if (found === undefined) {
+                  console.log(subject.id)
+                }
+
+                if (subject.type === "mandatory") {
+                  tmpSubjectList.mandatory.push(found)
+                } else if (subject.type === "optional") {
+                  tmpSubjectList.optional.push(found)
+                } else if (subject.type === "compulsory") {
+                  tmpSubjectList.compulsoryOptional.push(found)
+                }
+              })
+
+              setSubjectList(tmpSubjectList)
+            })
+        })
     }, [])
+
     //@@viewOff:private
 
     //@@viewOn:interface
@@ -321,7 +320,7 @@ let StudyProgramDetail = createVisualComponent({
     return (
       <>
         <RouteBar />
-        <StudyProgramDetailBrick studyProgram={studyPrograms[props.studyProgram]} subjects={subjects[props.studyProgram]} />
+        <StudyProgramDetailBrick studyProgram={studyProgram} setStudyProgram={setStudyProgram} subjects={subjectList} setSubjectList={setSubjectList} />
       </>
     );
     //@@viewOff:render

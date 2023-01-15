@@ -8,7 +8,11 @@
     "useCaseMap": {
       "sys/uuAppWorkspace/init": {
         "sysStateList": ["created","assigned"],
-        "profileList": ["AwidLicenseOwner","AwidInitiator"]
+        "profileList": ["AwidLicenseOwner","AwidInitiator", "Public"]
+      },
+      "sys/uuAppWorkspace/permission/list": {
+        "sysStateList": ["active"],
+        "profileList": ["AwidLicenseOwner","AwidInitiator", "Public"]
       },
       "sys/uuAppWorkspace/load": {
         "sysStateList": ["active"],

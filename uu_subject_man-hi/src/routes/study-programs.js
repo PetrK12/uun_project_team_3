@@ -56,32 +56,14 @@ let StudyPrograms = createVisualComponent({
   render(props) {
     //@@viewOn:private
     const [studyPrograms, setStudyPrograms] = useState()
-    // TODO connect to backend
+
     useEffect(() => {
-      setStudyPrograms(studyProgramsDef)
-
-      /*
-      fetch('/video/list')
+      fetch('http://localhost:8080/uu-subject-man/22222222222222222222222222222222/studyprogram/list')
         .then(response => response.json())
-        .then(data => setVideoList(data))
-
-      fetch("topic/list")
-        .then(response => response.json())
-        .then(data => {
-          let names = []
-          data.forEach(topic => {
-            names.push(topic.name)
-          })
-          setTopicListNames(names)
-          setTopicList(data)
-        })
-       */
+        .then(data => setStudyPrograms(data.itemList))
     }, [])
 
-    //const navigate = useNavigate();
-
     const [, setRoute] = useRoute();
-
 
     function getStudyProgramRouteName(name) {
       switch(name) {

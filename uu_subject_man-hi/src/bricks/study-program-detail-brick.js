@@ -1,5 +1,5 @@
 //@@viewOn:imports
-import { Utils, createVisualComponent, PropTypes, useScreenSize } from "uu5g05";
+import { Utils, createVisualComponent, PropTypes, useScreenSize, useEffect, useSession } from "uu5g05";
 import {Container, Stack, Box, Tabs, Tab, Grid, Typography, CircularProgress, Fab} from "@mui/material";
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined';
 import CardMembershipOutlinedIcon from '@mui/icons-material/CardMembershipOutlined';
@@ -9,7 +9,7 @@ import SubjectTile from "../bricks/subject-tile";
 import StudyProgramTile from "../bricks/study-program-tile";
 import SubjectForm from "../bricks/subject-form";
 import Config from "./config/config.js";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import SubjectDetail from "./subject-detail";
 //@@viewOff:imports
@@ -44,28 +44,62 @@ const StudyProgramDetailBrick = createVisualComponent({
     //@@viewOn:private
     const [formShow, setFormShow] = useState(false);
     const [value, setValue] = useState(0);
-    const [subjects, setSubjects] = useState({})
+    const [isTeacher, setIsTeacher] = useState(false)
+    const { identity } = useSession();
+
     const handleChange = (event, newValue) => {
       setValue(newValue);
     };
 
     useEffect(() => {
-      // TODO use BE to load subjects
-
-      setSubjects(props.subjects)
+      fetch('http://localhost:8080/uu-subject-man/22222222222222222222222222222222/sys/uuAppWorkspace/permission/list?uuIdentityList=' + identity.uuIdentity)//?uuIdentityList=4624-469-1')
+        .then(response => response.json())
+        .then(data => {
+          if (data.itemList[0].profile === "Executives") {
+            //setIsTeacher(true)
+            setIsTeacher(true)
+          } else {
+            setIsTeacher(false)
+          }
+        })
     }, [])
 
-    function handleDelete(subjectId) {
-      // TODO use BE to delete subject
-      let tmpSubjects
+    const handleDelete = (id) => {
+      //let tmpProgram = {id: props.studyProgram.id, subjectList: props.studyProgram.subjectList}
+      //let tmpProgram = Object.assign({}, props.studyProgram)
+      let tmpProgram = JSON.parse(JSON.stringify(props.studyProgram))
 
-      for (const studyProgram in subjects) {
-        for (const subject in studyProgram) {
-          if (subject.id != subjectId) {
-            tmpSubjects[studyProgram] += subject
-          }
+      let subjectIndex = tmpProgram.subjectList.findIndex(subject => subject.id === id)
+      if (subjectIndex < 0) {
+        console.log("Subject neexistuje")
+        throw new Error("Subject neexistuje")
+      }
+      tmpProgram.subjectList.splice(subjectIndex, 1)
+
+      let tmpSubjects = JSON.parse(JSON.stringify(props.subjects))
+
+      for (const subject in props.subjects) {
+        let subjectIndex2 = props.subjects[subject].findIndex(x => x.id === id)
+        if (subjectIndex2 >= 0) {
+          tmpSubjects[subject].splice(subjectIndex2, 1)
+          break
         }
       }
+
+      props.setSubjectList(tmpSubjects)
+      fetch("http://localhost:8080/uu-subject-man/22222222222222222222222222222222/studyprogram/update", {
+        method: "POST",
+        body: JSON.stringify({"id": tmpProgram.id, "subjectList": tmpProgram.subjectList}),
+        headers: {
+          "Content-type": "application/json"
+        }
+      })
+        .then(response => {
+          if (response.status >= 400) {
+            throw new Error(response.json())
+          }
+          return response.json()
+        })
     }
 
     function a11yProps(index) {
@@ -78,7 +112,7 @@ const StudyProgramDetailBrick = createVisualComponent({
     function getSubjectHtmlList(subjectList) {
       const subjectHtmlList = [];
       subjectList.forEach(subject => {
-        subjectHtmlList.push(<SubjectTile subject={subject} handleDelete={handleDelete}/>)
+        subjectHtmlList.push(<SubjectTile subject={subject} handleDelete={handleDelete} showDelete={isTeacher}/>)
       })
       return subjectHtmlList;
     }
@@ -91,6 +125,18 @@ const StudyProgramDetailBrick = createVisualComponent({
         child = getSubjectHtmlList(subjectList);
       }
       return child;
+    }
+
+    function subjectListComponent(subjectList) {
+      return (
+        <Stack>
+          <Container sx={{ py: 1 }} maxWidth="md">
+            <Grid container spacing={4}>
+              {getChild(subjectList)}
+            </Grid>
+          </Container>
+        </Stack>
+      )
     }
 
     function TabPanel(props) {
@@ -113,16 +159,19 @@ const StudyProgramDetailBrick = createVisualComponent({
       );
     }
 
-    function subjectListComponent(subjectList) {
-      return (
-        <Stack>
-          <Container sx={{ py: 1 }} maxWidth="md">
-            <Grid container spacing={4}>
-              {getChild(subjectList)}
-            </Grid>
-          </Container>
-        </Stack>
-      )
+    function addButton() {
+      if (isTeacher) {
+        return (
+          <Fab color="primary" aria-label="add" disabled={!isTeacher}
+               sx={{ position: 'absolute', bottom: 50, right: 50 }}
+               onClick={() => setFormShow(true)}
+          >
+            <AddIcon />
+          </Fab>
+        )
+      } else {
+        return <></>
+      }
     }
 
     //@@viewOff:private
@@ -134,7 +183,7 @@ const StudyProgramDetailBrick = createVisualComponent({
     //const attrs = Utils.VisualComponent.getAttrs(props);
     return (
       <>
-        <SubjectForm formShow={formShow} setFormShow={setFormShow}/>
+        <SubjectForm formShow={formShow} setFormShow={setFormShow} subjects={props.subjects} setSubjectList={props.setSubjectList} currentTab={value} studyProgram={props.studyProgram} setStudyProgram={props.setStudyProgram}/>
         <StudyProgramTile studyProgram={props.studyProgram}/>
 
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -146,21 +195,16 @@ const StudyProgramDetailBrick = createVisualComponent({
         </Box>
 
         <TabPanel value={value} index={0}>
-          {subjectListComponent(subjects.mandatory)}
+          {subjectListComponent(props.subjects.mandatory)}
         </TabPanel>
         <TabPanel value={value} index={1}>
-          {subjectListComponent(subjects.compulsoryOptional)}
+          {subjectListComponent(props.subjects.compulsoryOptional)}
         </TabPanel>
         <TabPanel value={value} index={2}>
-          {subjectListComponent(subjects.optional)}
+          {subjectListComponent(props.subjects.optional)}
         </TabPanel>
 
-        <Fab color="primary" aria-label="add"
-             sx={{ position: 'absolute', bottom: 50, right: 50 }}
-             onClick={() => setFormShow(true)}
-        >
-          <AddIcon />
-        </Fab>
+        {addButton()}
       {/*</div>*/}
       </>
     );

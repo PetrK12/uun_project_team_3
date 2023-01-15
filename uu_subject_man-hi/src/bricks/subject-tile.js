@@ -38,8 +38,14 @@ const SubjectTile = createVisualComponent({
     //@@viewOn:private
     const [detailShow, setDetailShow] = useState(false);
 
-    function handleDelete() {
-
+    function deleteButton() {
+      if (props.showDelete) {
+        return (
+          <Button size="small" onClick={() => props.handleDelete(props.subject.id)}>Smazat</Button>
+        )
+      } else {
+        return false
+      }
     }
     //@@viewOff:private
 
@@ -67,7 +73,7 @@ const SubjectTile = createVisualComponent({
           </CardContent>
           <CardActions >
             <Button size="small" onClick={() => setDetailShow(true)}>Více informací</Button>
-            <Button size="small" onClick={() => props.handleDelete(props.subject.id)}>Smazat</Button>
+            {deleteButton()}
           </CardActions>
         </Card>
 
